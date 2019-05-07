@@ -1,0 +1,88 @@
+@import '../../resources/mixins';
+
+// RECHARTS
+.recharts-wrapper .xAxis .recharts-cartesian-axis-ticks .recharts-cartesian-axis-tick:first-child {
+  display: none;
+}
+
+.recharts-tooltip {
+  z-index: 999;
+  background-color: #000000;
+  opacity: 0.8;
+  font-size: 12px;
+  color: #ffffff;
+  border-radius: 3px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+// INFO CARD
+.infoCard {
+  color: $text;
+  background-color: $white;
+  padding-left: rem(5);
+  padding-right: rem(5);
+  padding-top: rem(20);
+  padding-bottom: rem(20);
+  border-radius: 5px;
+  display: block;
+  margin-bottom: rem(20);
+
+  &__digit {
+    float: left;
+    margin-right: rem(20);
+    font-size: rem(42);
+    width: rem(56);
+    line-height: rem(50);
+    text-align: center;
+    font-weight: bold;
+    i {
+      font-size: rem(36);
+    }
+  }
+
+  &__title {
+    font-weight: bold;
+    font-size: rem(16);
+  }
+
+  &__desc {
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  &--primary, &--green, &--blue {
+    color: $white !important;
+  }
+
+  &--empty {
+    border: 1px solid $gray-border;
+  }
+
+  &--primary {
+    background: $primary !important;
+    border-bottom-color: $primary;
+  }
+
+  &--green {
+    background: $success !important;
+    border-bottom-color: $success;
+  }
+
+  &--blue {
+    background: #40a9ff !important;
+    border-bottom-color: #40a9ff;
+  }
+
+  @media (max-width: $md-max-width) {
+    margin-bottom: rem(16) !important;
+    margin-top: 0 !important;
+  }
+}
+
+.card-body-mb10 {
+  margin-bottom: 10px;
+}

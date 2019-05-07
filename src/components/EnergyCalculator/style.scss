@@ -1,0 +1,118 @@
+// FONT
+.font-grey-14 {
+  color: grey;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.font-black-30 {
+  color: #000000;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.error-msg {
+  color: red
+}
+
+// MAX ENERGY LIMIT COLLAPSE
+.ant-collapse-content > .ant-collapse-content-box {
+  padding: 0;
+}
+
+.ant-collapse-borderless > .ant-collapse-item{
+  border-bottom: 0;
+}
+
+.ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header {
+  padding-left: 0px;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  width: 100px;
+}
+
+.card-body-collapse {
+  background-color: #f9fafc;
+  border: 1px solid #d9d9d9;
+  border-bottom: 0;
+  margin-bottom: 20px;
+}
+
+.card-body-collapse-header {
+  font-size: 15px;
+  padding-left: 40px;
+  width: 150px;
+  font-weight: 600;
+}
+
+.card-body-collapse-panel {
+  background-color: #e7e9eb;
+}
+
+.card-body-collapse-panel-header {
+  padding-left: 40px;
+  padding-top: 10px;
+}
+
+.card-body-collapse-panel-row {
+  margin-bottom: 5px;
+}
+
+// LEARN MORE
+.learn-more {
+  color: #cf132d;
+  text-decoration: underline;
+  font-weight: 600;
+
+  &:hover {
+    color: #cf132d;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  &:focus {
+    color: #cf132d;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+}
+
+.learn-more-content {
+  color: #000000;
+}
+
+// ICON
+.icmn10 {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+// CARD BODY
+.card-body-pt0 {
+  padding-top: 0;
+}
+
+.card-body-pt10 {
+  padding-top: 10px;
+}
+
+.card-body-pt30 {
+  padding-top: 30px;
+}
+
+.card-body-mt10 {
+  margin-top: 10px;
+}
+
+.card-body-mb10 {
+  margin-bottom: 10px;
+}
+
+.card-body-mb15 {
+  margin-bottom: 15px;
+}
+
+.card-body-mtb5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

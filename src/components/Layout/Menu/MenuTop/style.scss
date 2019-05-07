@@ -1,0 +1,162 @@
+@import '../../../../resources/mixins';
+
+.menuTop {
+  &__logo {
+    height: 48px;
+    width: 150px;
+    background: $menuBg-darken;
+    float: left;
+  }
+
+  &__logoContainer {
+    height: 48px;
+    padding: 7px 20px 0px 17px;
+    img {
+      height: 32px;
+    }
+  }
+
+  &__icon {
+    margin-top: rem(16);
+    margin-right: rem(7);
+    float: left;
+
+    @media (max-width: $md-max-width) {
+      display: none !important;
+    }
+  }
+  .ant-menu-item-divider {
+    height: 36px !important;
+    margin-top: 6px !important;
+    width: 1px !important;
+    float: left;
+  }
+
+  .ant-menu-dark {
+    .ant-menu-item-divider {
+      background: $text-darken-more !important;
+    }
+    .menuTop__icon {
+      color: $white;
+    }
+
+    .menuTop__item-title {
+      color: $white;
+    }
+  }
+
+  .ant-menu-light {
+    background-color: #000000;
+
+    .menuTop__icon {
+      color: #ffffff;
+    }
+
+    .menuTop__item-title {
+      color: #ffffff;
+    }
+
+    .ant-menu-item {
+      font-size: 1.07rem;
+      > a {
+        &:hover {
+          .menuTop__item-title {
+            color: #e7152e;
+          }
+          .menuTop__icon {
+            color: #e7152e;
+          }
+        }
+      }
+    }
+
+    .ant-menu-item-selected {
+      > a {
+        .menuTop__item-title {
+          color: #cf132d;
+        }
+        .menuTop__icon {
+          color: #cf132d;
+        }
+      }
+    }
+  }
+}
+
+.icondiscord {
+  background-image: url(/resources/images/discord.png);
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  width: 30px;
+  height: 30px;
+  -webkit-font-smoothing: antialiased;
+}
+
+// top menu
+.menuTop {
+  &__logo {
+    height: 48px;
+    width: 150px;
+    background: $menuBg-darken;
+    float: left;
+  }
+
+  &__logoContainer {
+    height: 48px;
+    padding: 7px 15px 0px 17px;
+    img {
+      height: 30px;
+    }
+  }
+
+  &__icon {
+    margin-top: rem(16);
+    margin-right: rem(7);
+    float: left;
+    @media (max-width: $md-max-width) {
+      display: none !important;
+    }
+  }
+  .ant-menu-item-divider {
+    height: 36px !important;
+    margin-top: 6px !important;
+    width: 1px !important;
+    float: left;
+  }
+
+  .ant-menu-dark {
+    .ant-menu-item-divider {
+      background: $text-darken-more !important;
+    }
+    .menuTop__icon {
+      color: $text;
+    }
+    .menuTop__item-title {
+      color: $text;
+    }
+  }
+
+  .ant-menu-light {
+    .menuTop__icon {
+      color: $white;
+    }
+    .menuTop__item-title {
+      color: $white;
+    }
+    .menuTop__item-title_external {
+      color: $white;
+      :hover {
+        color:red;
+        .menuTop__icon {
+          color: red;
+        }
+      }
+    }
+    .menuTop__item-title_external > a {
+      color: $white;
+    }
+  }
+}
