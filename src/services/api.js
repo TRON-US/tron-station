@@ -1,4 +1,4 @@
-import TronWeb from "tronweb";
+import TronWeb from "tronweb-station";
 import netRouter from "services/netRouter.js";
 import httpProvider from "services/httpProvider.js";
 import Util from "utils/utils.js";
@@ -46,7 +46,8 @@ function Witness() {
     blockReward: 0,
     totalReward: 0,
     totalProduced: 0,
-    totalMissed: 0
+    totalMissed: 0,
+    brokerage: 0
   };
 }
 
@@ -85,6 +86,10 @@ class Api {
 
   async getAccount(address) {
     return this._tronWeb.trx.getAccount(address);
+  }
+
+  async getSRBrokerage(address) {
+      return this._tronWeb.trx.getBrokerage(address);
   }
 
   async getAccountResources(address) {
@@ -233,13 +238,14 @@ class Api {
     let totalVotes = _.sumBy(srs, sr => {
       return sr.voteCount;
     });
-    let totalVoteReward = 16 * 20 * 60 * 24;
-    let totalBlockReward = 2 * totalVoteReward;
+    let totalVoteReward = 160 * 20 * 60 * 24;
+    let totalBlockReward = 16 * 20 * 60 * 24;
     let srAmount = netRouter.isMainNet() ? 27 : srs.length;
     await Promise.all(
       srs.map(async sr => {
         let witness = new Witness();
         const account = await this.getAccount(sr.address);
+        const brokerage = this._filterData(await this.getSRBrokerage(sr.address)) / 100;
         witness.address = sr.address;
         witness.votes = this._filterData(sr.voteCount);
         witness.votesPercentage = (100 * (witness.votes / totalVotes)).toFixed(
@@ -247,12 +253,13 @@ class Api {
         );
         witness.url = sr.url;
         witness.voteReward = Math.ceil(
-          totalVoteReward * (witness.votes / totalVotes)
+          totalVoteReward * (witness.votes / totalVotes) * brokerage
         );
-        witness.blockReward = Math.ceil(totalBlockReward / srAmount);
+        witness.blockReward = Math.ceil((totalBlockReward / srAmount) * brokerage);
         witness.totalReward = witness.voteReward + witness.blockReward;
         witness.totalProduced = sr.totalProduced;
         witness.totalMissed = sr.totalMissed;
+        witness.brokerage = brokerage;
         if (account !== null && account !== undefined
             && account.account_name != null && account.account_name !== undefined) {
           witness.name = Util.byteToString(Util.hexstring2btye(account.account_name));

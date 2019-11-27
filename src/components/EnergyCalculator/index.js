@@ -320,7 +320,7 @@ class EnergyCalcForm extends React.Component {
       </Select>
     )
     const learnMore = (
-      <a className="learn-more" href="javascript:void(0)">Learn more</a>
+      <a className="learn-more" href="javascript:void(0)" rel="noopener noreferrer">Learn more</a>
     );
     const accountRemainPanel = (
       <div className="row">

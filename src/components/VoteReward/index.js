@@ -15,7 +15,7 @@ const RadioGroup = Radio.Group;
 const srTableColumns = [
   { title: <strong>Rank</strong>, width:50,  dataIndex: 'rank', key: 'rank', fixed: 'left' },
   { 
-    title: <strong>SR</strong>, width:210,  dataIndex: 'name', key: 'name', fixed: 'left', 
+    title: <strong>SR</strong>, width:150,  dataIndex: 'name', key: 'name', fixed: 'left',
     onFilter: (value, record) => record.name.indexOf(value) === 0, 
     render: (text, record) => <a style={{color:'#db3747'}} href={record.url}
     target="_blank"
@@ -30,6 +30,10 @@ const srTableColumns = [
     title: <strong>% of Votes</strong>, width:130,  dataIndex: 'votesPercentage', key: 'votesPercentage', 
     render: (text, record) => <span>{text}%</span>
   },
+  {
+    title: <strong>Brokerage</strong>, width:100,  dataIndex: 'brokerage', key: 'brokerage',
+    render: (text, record) => <span>{text * 100}%</span>
+  },
   { 
     title: <strong>Vote Reward (TRX)</strong>, width:130,  dataIndex: 'voteReward', key: 'voteReward',
     render: (text, record) => <span>{text.toLocaleString()}</span>
@@ -39,7 +43,7 @@ const srTableColumns = [
     render: (text, record) => <span>{text.toLocaleString()}</span>
   },
   { 
-    title: <strong>Total Reward (TRX)</strong>,  dataIndex: 'totalReward', key: 'totalReward',
+    title: <strong>Total Reward (TRX)</strong>, width:130,  dataIndex: 'totalReward', key: 'totalReward',
     render: (text, record) => <span>{text.toLocaleString()}</span>
   }
 ];
@@ -152,8 +156,10 @@ class SRVoteForm extends React.Component {
       0
     );
     let totalSrVotes = addedVotes;
+    let brokerage = 0.2;
     if (this.state.srSelect != null) {
       totalSrVotes += this.state.srSelect.votes;
+      brokerage = this.state.srSelect.brokerage
     }
 
     let ascData = _.reverse(_.clone(this.state.allData));
@@ -171,10 +177,10 @@ class SRVoteForm extends React.Component {
         : 'New Candidate';
     let totalVotes = this.state.totalVotes + addedVotes;
     let percentage = ((100 * totalSrVotes) / totalVotes).toFixed(6);
-    let voteReward = Math.ceil(16 * 20 * 60 * 24 * (totalSrVotes / totalVotes));
+    let voteReward = Math.ceil(160 * 20 * 60 * 24 * (totalSrVotes / totalVotes) * brokerage);
     let blockReward =
       rank <= this.state.srData.length
-        ? Math.ceil((32 * 20 * 60 * 24) / this.state.srData.length)
+        ? Math.ceil(((16 * 20 * 60 * 24) / this.state.srData.length) * brokerage)
         : 0;
     let totalReward = blockReward + voteReward;
     let rewardObj = {
@@ -183,6 +189,7 @@ class SRVoteForm extends React.Component {
       votes: totalSrVotes.toLocaleString(),
       totalVotes: totalVotes.toLocaleString(),
       percentage: percentage + '%',
+      brokerage: (brokerage * 100) + '%',
       voteReward: voteReward.toLocaleString(),
       blockReward: blockReward.toLocaleString(),
       totalReward: totalReward.toLocaleString()
@@ -222,11 +229,9 @@ class SRVoteForm extends React.Component {
                       <div className="card-body pb-0">
                         <p className="card-body-custv-desp">
                           <span className="card-body-mb10">A SR Total Vote rewards is composed of Vote reward and Block Reward. </span><br/>
-                          <strong>● Vote Rewards:</strong> 16 (trx/block) * 20 (blocks/min) * 60 (min/hour) * 6 (hours/election) * 4 (elections/day) = 460,800 (trx/day).<br/>
-                          <span className="card-body-mb5">
-                            &nbsp;&nbsp;&nbsp;For each candidate, Vote Rewards = 460,800 * (# votes / # total votes)<br/>
-                          </span>
-                          <strong>● Block Rewards:</strong> 32 (trx/block) x 20 (blocks/min) x 60 (min/hour) x 24 (hours/day) = 921,600 (trx/Day)<br/>
+                          <strong>● Vote Rewards:</strong> 160 (trx/block) * 20 (blocks/min) * 60 (min/hour) * 6 (hours/election) * 4 (elections/day) * (# votes / # total votes) * brokerage.<br/>
+                          <strong>● Block Rewards:</strong> (16 (trx/block) x 20 (blocks/min) x 60 (min/hour) x 24 (hours/day) / 27) * brokerage<br/>
+                          <font style={{ color: '#cf132d'}}>* Default brokerage is 20% except you choose SR</font>
                         </p>
                       </div>
                       
@@ -345,6 +350,16 @@ class SRVoteForm extends React.Component {
                               <table>
                                 <tbody>
                                   <tr className="row100 body">
+                                      <td className="cell100 column1">Brokerage</td>
+                                      <td className="cell100 column2">{this.state.calcReward.brokerage === undefined ? '-' : this.state.calcReward.brokerage}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div className="table100-body js-pscroll">
+                              <table>
+                                <tbody>
+                                  <tr className="row100 body">
                                     <td className="cell100 column1">Votes Reward</td>
                                     <td className="cell100 column2">{this.state.calcReward.voteReward === undefined ? '-' : this.state.calcReward.voteReward}</td>
                                   </tr>
@@ -383,7 +398,7 @@ class SRVoteForm extends React.Component {
                     <div className="card card--example">
                       <div className="card-header">
                         <h5 className="text-black">
-                          <strong className="text-capitalize">SR votes reward</strong>
+                          <strong className="text-capitalize">SR votes reward (Daily)</strong>
                         </h5>
                       </div>
                       <div className="card-body pb-0">
@@ -391,7 +406,7 @@ class SRVoteForm extends React.Component {
                           <div>
                             <RadioGroup onChange={event => this.handleSelectChange(event.target.value)} value={this.state.tabVal}>
                               <RadioButton value={'SR'}>SR</RadioButton>
-                              <RadioButton value={'Candidate'}>Candidate</RadioButton>
+                              <RadioButton value={'Candidate'}>Partners</RadioButton>
                             </RadioGroup>
                             <span style={{float: 'right', verticalAlign: 'middle'}}>
                               <span className="font-grey-14">Total Votes:</span> <span className="font-black-30 ">{this.state.totalVotes.toLocaleString()}</span>

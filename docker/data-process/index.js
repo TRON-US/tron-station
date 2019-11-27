@@ -192,8 +192,8 @@ function scheduleVoteRewardHistory(){
   // insert 4, 10, 16, 22
   schedule.scheduleJob(voteRewardRule, async function(){
 
-    let totalVoteReward = 16 * 20 * 60 * 24;
-    let totalBlockReward = 2 * totalVoteReward;
+    let totalVoteReward = 160 * 20 * 60 * 24;
+    let totalBlockReward = 16 * 20 * 60 * 24;
 
     // Main net
     let res = await httpProvider.post(mainNet.url + "/wallet/listwitnesses");
@@ -211,8 +211,11 @@ function scheduleVoteRewardHistory(){
       let account = await httpProvider.post(mainNet.url + "/wallet/getaccount",
                       JSON.stringify({'address': witness.address}));
       account = JSON.parse(account);
-      let voteReward = Math.ceil(totalVoteReward * ((witness.voteCount === undefined ? 0 : witness.voteCount) / totalVotes));
-      let blockReward = index < 27 ? Math.ceil(totalBlockReward / srAmount) : 0
+      let brokerage = await httpProvider.post(mainNet.url + "/wallet/getBrokerage", {'address': witness.address});
+      brokerage = JSON.parse(brokerage);
+      brokerage = brokerage.brokerage / 100;
+      let voteReward = Math.ceil(totalVoteReward * ((witness.voteCount === undefined ? 0 : witness.voteCount) / totalVotes) * brokerage);
+      let blockReward = index < 27 ? Math.ceil((totalBlockReward / srAmount) * brokerage) : 0
       sqlParam.push([
         account.account_name === undefined ? witness.url : util.byteToString(util.hexstring2btye(account.account_name)),
         witness.address,
@@ -243,11 +246,14 @@ function scheduleVoteRewardHistory(){
 
     for (let index = 0; index < witnesses.length; index++) {
       let witness = witnesses[index];
-      let account = await httpProvider.post(mainNet.url + "/wallet/getaccount",
+      let account = await httpProvider.post(shastaNet.url + "/wallet/getaccount",
                       JSON.stringify({'address': witness.address}));
       account = JSON.parse(account);
-      let voteReward = Math.ceil(totalVoteReward * ((witness.voteCount === undefined ? 0 : witness.voteCount) / totalVotes));
-      let blockReward = index < 27 ? Math.ceil(totalBlockReward / srAmount) : 0
+      let brokerage = await httpProvider.post(shastaNet.url + "/wallet/getBrokerage", {'address': witness.address});
+      brokerage = JSON.parse(brokerage);
+      brokerage = brokerage.brokerage / 100;
+      let voteReward = Math.ceil(totalVoteReward * ((witness.voteCount === undefined ? 0 : witness.voteCount) / totalVotes) * brokerage);
+      let blockReward = index < 27 ? Math.ceil((totalBlockReward / srAmount) * brokerage) : 0
       sqlParam.push([
         account.account_name === undefined ? witness.url : util.byteToString(util.hexstring2btye(account.account_name)),
         witness.address,
